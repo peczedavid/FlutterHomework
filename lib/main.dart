@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_homework/network/data_source_interceptor.dart';
 import 'package:flutter_homework/ui/bloc/login/login_page.dart';
+import 'package:flutter_homework/ui/provider/login/login_model.dart';
 import 'package:flutter_homework/ui/provider/login/login_page.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //DO NOT MODIFY
@@ -41,22 +43,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: appTitle,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text(appTitle),
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => LoginModel())],
+      child: MaterialApp(
+        title: appTitle,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
         ),
-        body: const LoginPageProvider(),
-      ),
+        home: Scaffold(
+          appBar: AppBar(
+            title: const Text(appTitle),
+          ),
+          body: const LoginPageProvider(),
+        ),
 
-      //DO NOT MODIFY
-      navigatorObservers: GetIt.I<List<NavigatorObserver>>(),
-      //DO NOT MODIFY
-      debugShowCheckedModeBanner: false,
+        //DO NOT MODIFY
+        navigatorObservers: GetIt.I<List<NavigatorObserver>>(),
+        //DO NOT MODIFY
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }
