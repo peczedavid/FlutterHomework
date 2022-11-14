@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_homework/network/data_source_interceptor.dart';
 import 'package:flutter_homework/ui/bloc/login/login_page.dart';
+import 'package:flutter_homework/ui/provider/list/list_model.dart';
+import 'package:flutter_homework/ui/provider/list/list_page.dart';
 import 'package:flutter_homework/ui/provider/login/login_model.dart';
 import 'package:flutter_homework/ui/provider/login/login_page.dart';
 import 'package:get_it/get_it.dart';
@@ -44,18 +46,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => LoginModel())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => LoginModel()),
+        ChangeNotifierProvider(create: (_) => ListModel()),
+      ],
       child: MaterialApp(
         title: appTitle,
+        routes: {
+          "/login": (context) => const LoginPageProvider(),
+          "/list": (context) => const ListPageProvider(),
+        },
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text(appTitle),
-          ),
-          body: const LoginPageProvider(),
-        ),
+        initialRoute: "/login",
 
         //DO NOT MODIFY
         navigatorObservers: GetIt.I<List<NavigatorObserver>>(),
