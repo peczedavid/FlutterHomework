@@ -59,6 +59,7 @@ class _ListPageProviderState extends State<ListPageProvider> {
                   return Card(
                     child: ListTile(
                       title: Text(model.users[i].name),
+                      leading: Image.network(model.users[i].avatarUrl),
                     ),
                   );
                 },
