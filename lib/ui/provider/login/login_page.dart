@@ -20,7 +20,7 @@ class _LoginPageProviderState extends State<LoginPageProvider> {
      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var autoLogin = model.tryAutoLogin();
       if(autoLogin) {
-        Navigator.pushNamed(context, "/list");
+        Navigator.pushReplacementNamed(context, "/list");
       }
     });
   }
@@ -134,7 +134,7 @@ class _LoginPageProviderState extends State<LoginPageProvider> {
                             .login(emailController.text,
                                 passwordController.text, _rememberMe)
                             .then((value) {
-                          Navigator.pushNamed(context, "/list");
+                          Navigator.pushReplacementNamed(context, "/list");
                         }).catchError((error) {
                           var snackBar = SnackBar(
                             content: Text(error.message),
