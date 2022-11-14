@@ -53,11 +53,16 @@ class _ListPageProviderState extends State<ListPageProvider> {
       ),
       body: Center(
         child: model.isLoading
-            ? CircularProgressIndicator()
-            : SingleChildScrollView(
-                child: Column(
-                  children: [Text('User data')],
-                ),
+            ? const CircularProgressIndicator()
+            : ListView.builder(
+                itemBuilder: (context, i) {
+                  return Card(
+                    child: ListTile(
+                      title: Text(model.users[i].name),
+                    ),
+                  );
+                },
+                itemCount: model.users.length,
               ),
       ),
     );
