@@ -41,8 +41,6 @@ Future configureCustomDependencies() async {}
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  static const String appTitle = 'FlutterHW PPV33A';
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -51,7 +49,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ListModel()),
       ],
       child: MaterialApp(
-        title: appTitle,
+        title: 'Flutter Demo',
         routes: {
           "/login": (context) => const LoginPageProvider(),
           "/list": (context) => const ListPageProvider(),

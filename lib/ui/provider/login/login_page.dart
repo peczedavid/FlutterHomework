@@ -17,9 +17,9 @@ class _LoginPageProviderState extends State<LoginPageProvider> {
   @override
   void initState() {
     super.initState();
-     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var autoLogin = model.tryAutoLogin();
-      if(autoLogin) {
+      if (autoLogin) {
         Navigator.pushReplacementNamed(context, "/list");
       }
     });
@@ -40,9 +40,7 @@ class _LoginPageProviderState extends State<LoginPageProvider> {
   Widget build(BuildContext context) {
     model = Provider.of<LoginModel>(context);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(MyApp.appTitle),
-      ),
+      appBar: AppBar(),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 35),
         child: Form(
