@@ -28,9 +28,19 @@ class ListModel extends ChangeNotifier {
     notifyListeners();
     SharedPreferences sharedPreferences = GetIt.I<SharedPreferences>();
     String? accesToken = sharedPreferences.getString(LoginModel.accesTokenName);
+    String? tokenTmp = sharedPreferences.getString('token_tmp');
+    String token = '';
+    if(tokenTmp != null) {
+      token = tokenTmp;
+      sharedPreferences.remove('token_tmp');
+    }
+    else if(accesToken != null) {
+      token = accesToken;
+    }
+
     return dio
         .get<List<Map<String, String>>>('/users',
-            options: Options(headers: {"authorization": 'Bearer $accesToken'}))
+            options: Options(headers: {"authorization": 'Bearer $token'}))
         .then((value) {
           users.clear();
           for (var mapUserItem in value.data!) {

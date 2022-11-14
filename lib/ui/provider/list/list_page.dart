@@ -22,10 +22,6 @@ class _ListPageProviderState extends State<ListPageProvider> {
       model.loadUsers().catchError((error) {
         var snackBar = SnackBar(
           content: Text(error.message),
-          action: SnackBarAction(
-            label: 'Close',
-            onPressed: () {},
-          ),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       });
@@ -45,8 +41,12 @@ class _ListPageProviderState extends State<ListPageProvider> {
             onPressed: () {
               SharedPreferences sharedPreferences =
                   GetIt.I<SharedPreferences>();
-              sharedPreferences.remove(LoginModel.accesTokenName);
-              Navigator.pushReplacementNamed(context, "/login");
+              if (sharedPreferences.get(LoginModel.accesTokenName) != null) {
+                sharedPreferences.remove(LoginModel.accesTokenName).then(
+                    (value) => Navigator.pushReplacementNamed(context, "/"));
+              } else {
+                Navigator.pushReplacementNamed(context, "/");
+              }
             },
           ),
         ],

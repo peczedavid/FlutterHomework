@@ -22,19 +22,26 @@ class LoginModel extends ChangeNotifier {
   static const String accesTokenName = 'access_token';
 
   Future login(String email, String password, bool rememberMe) async {
+    if(isLoading) return;
+    isLoading = true;
     Dio dio = GetIt.I<Dio>();
     Map<String, String> data = {'email': email, 'password': password};
     return dio.post<Map<String, String>>('/login', data: data).then((response) {
-      isLoading = false;
+      print('login model success');
       if (rememberMe) {
         var token = response.data!['token'];
         SharedPreferences sharedPreferences = GetIt.I<SharedPreferences>();
         sharedPreferences.setString(accesTokenName, token!);
       }
+      else {
+        var token = response.data!['token'];
+        SharedPreferences sharedPreferences = GetIt.I<SharedPreferences>();
+        sharedPreferences.setString('token_tmp', token!);
+      }
       notifyListeners();
     }).catchError((error) {
+      print('login model error');
       // TODO: handle as map
-      isLoading = false;
       var parsedError = jsonDecode(error.response.toString());
       notifyListeners();
       throw LoginException(parsedError['message']);

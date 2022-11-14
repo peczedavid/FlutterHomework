@@ -51,13 +51,13 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         routes: {
-          "/login": (context) => const LoginPageProvider(),
+          "/": (context) => const LoginPageProvider(),
           "/list": (context) => const ListPageProvider(),
         },
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: "/login",
+        initialRoute: "/",
 
         //DO NOT MODIFY
         navigatorObservers: GetIt.I<List<NavigatorObserver>>(),
