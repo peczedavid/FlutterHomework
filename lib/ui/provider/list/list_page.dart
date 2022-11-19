@@ -18,7 +18,7 @@ class _ListPageProviderState extends State<ListPageProvider> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      model.loadUsers().catchError((error) {
+      model.loadUsers().then((value) => null).catchError((error) {
         var snackBar = SnackBar(
           content: Text(error.message),
         );
@@ -38,13 +38,17 @@ class _ListPageProviderState extends State<ListPageProvider> {
           IconButton(
             icon: const Icon(Icons.logout_outlined),
             onPressed: () {
-              SharedPreferences sharedPreferences = GetIt.I<SharedPreferences>();
-              bool isTokenSaved = sharedPreferences.containsKey(LoginModel.accesTokenName);
-              if(isTokenSaved) {
-                sharedPreferences.remove(LoginModel.accesTokenName).then((value) => 
-                Navigator.pushReplacementNamed(context, "/"));
-              }
-              else {
+              SharedPreferences sharedPreferences =
+                  GetIt.I<SharedPreferences>();
+              bool isTokenSaved =
+                  sharedPreferences.containsKey(LoginModel.accesTokenName);
+              if (isTokenSaved) {
+                // Először az adott kulcs-ra remove-oltam, de az valamiért null-t adott vissza
+                // a tesztek során, a clear az nem
+                // ebben a kis applikációban mind a 2 jó, mivel úgyis 1 dolgot tárolunk
+                sharedPreferences.clear().then(
+                    (value) => Navigator.pushReplacementNamed(context, "/"));
+              } else {
                 Navigator.pushReplacementNamed(context, "/");
               }
             },

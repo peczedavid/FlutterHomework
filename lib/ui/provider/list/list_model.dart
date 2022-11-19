@@ -23,28 +23,25 @@ class ListModel extends ChangeNotifier {
   var users = <UserItem>[];
 
   Future loadUsers() async {
+    if (isLoading) return;
     isLoading = true;
     notifyListeners();
     Dio dio = GetIt.I<Dio>();
-    SharedPreferences sharedPreferences = GetIt.I<SharedPreferences>();
-    var token = sharedPreferences.getString(LoginModel.accesTokenName);
-    print(token);
-    return dio
-        .get('/users')
-        .then((value) {
-          users.clear();
-          for (var mapUserItem in value.data!) {
-            String? name = mapUserItem['name'];
-            String? avatarUrl = mapUserItem['avatarUrl'];
-            users.add(UserItem(name!, avatarUrl!));
-          }
-          isLoading = false;
-          notifyListeners();
-        }).catchError((error) {
-          isLoading = false;
-          notifyListeners();
-          var parsedError = jsonDecode(error.response.toString());
-          throw ListException(parsedError['message']);
-        });
+    try {
+      var response = await dio.get('/users');
+      users.clear();
+      for (var mapUserItem in response.data!) {
+        String? name = mapUserItem['name'];
+        String? avatarUrl = mapUserItem['avatarUrl'];
+        users.add(UserItem(name!, avatarUrl!));
+      }
+      isLoading = false;
+      notifyListeners();
+    } catch (error) {
+      isLoading = false;
+      notifyListeners();
+      var parsedError = jsonDecode((error as dynamic).response.toString());
+      throw ListException(parsedError['message']);
+    }
   }
 }

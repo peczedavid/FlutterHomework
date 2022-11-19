@@ -37,6 +37,7 @@ class LoginModel extends ChangeNotifier {
       }
     } catch (error) {
       var parsedError = jsonDecode((error as dynamic).response.toString());
+      isLoading = false;
       notifyListeners();
       throw LoginException(parsedError['message']);
     }
