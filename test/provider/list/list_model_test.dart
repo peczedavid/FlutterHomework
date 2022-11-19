@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_homework/main.dart';
 import 'package:flutter_homework/network/user_item.dart';
 import 'package:flutter_homework/ui/provider/list/list_model.dart';
+import 'package:flutter_homework/ui/provider/login/login_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';

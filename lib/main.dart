@@ -43,27 +43,53 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => LoginModel()),
-        ChangeNotifierProvider(create: (_) => ListModel()),
-      ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        routes: {
-          "/": (context) => const LoginPageProvider(),
-          "/list": (context) => const ListPageProvider(),
-        },
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        initialRoute: "/",
-
-        //DO NOT MODIFY
-        navigatorObservers: GetIt.I<List<NavigatorObserver>>(),
-        //DO NOT MODIFY
-        debugShowCheckedModeBanner: false,
+    return MaterialApp(
+      title: 'Flutter Demo',
+      routes: {
+        "/": (context) => ChangeNotifierProvider(
+              create: (_) => LoginModel(),
+              child: const LoginPageProvider(),
+            ),
+        "/list": (context) => ChangeNotifierProvider(
+              create: (_) => ListModel(),
+              child: const ListPageProvider(),
+            ),
+      },
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      initialRoute: "/",
+
+      //DO NOT MODIFY
+      navigatorObservers: GetIt.I<List<NavigatorObserver>>(),
+      //DO NOT MODIFY
+      debugShowCheckedModeBanner: false,
     );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return MultiProvider(
+  //     providers: [
+  //       ChangeNotifierProvider(create: (_) => LoginModel()),
+  //       ChangeNotifierProvider(create: (_) => ListModel()),
+  //     ],
+  //     child: MaterialApp(
+  //       title: 'Flutter Demo',
+  //       routes: {
+  //         "/": (context) => const LoginPageProvider(),
+  //         "/list": (context) => const ListPageProvider(),
+  //       },
+  //       theme: ThemeData(
+  //         primarySwatch: Colors.blue,
+  //       ),
+  //       initialRoute: "/",
+
+  //       //DO NOT MODIFY
+  //       navigatorObservers: GetIt.I<List<NavigatorObserver>>(),
+  //       //DO NOT MODIFY
+  //       debugShowCheckedModeBanner: false,
+  //     ),
+  //   );
+  // }
 }

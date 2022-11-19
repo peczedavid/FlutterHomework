@@ -19,7 +19,7 @@ class LoginException extends Equatable implements Exception {
 class LoginModel extends ChangeNotifier {
   var isLoading = false;
 
-  static const String accesTokenName = 'access_token';
+  static const String accesTokenName = 'TEST_TOKEN';
 
   Future login(String email, String password, bool rememberMe) async {
     if(isLoading) return;
@@ -27,6 +27,7 @@ class LoginModel extends ChangeNotifier {
     Dio dio = GetIt.I<Dio>();
     Map<String, String> data = {'email': email, 'password': password};
     return dio.post<Map<String, String>>('/login', data: data).then((response) {
+      print(response);
       print('login model success');
       if (rememberMe) {
         var token = response.data!['token'];

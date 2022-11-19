@@ -72,6 +72,7 @@ void main() {
         ),
       ),
     );
+    await tester.pumpAndSettle();
     expect(tester.widgetList<TextFormField>(find.byType(TextFormField)).every((element) => !element.enabled), true);
     expect(tester.widgetList<Checkbox>(find.byType(Checkbox)).every((element) => element.onChanged == null), true);
     expect(tester.widgetList<ButtonStyleButton>(find.byType(ButtonStyleButton)).every((element) => element.onPressed == null), true);

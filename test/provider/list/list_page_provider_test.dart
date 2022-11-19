@@ -40,6 +40,7 @@ void main() {
         ),
       ),
     );
+    await tester.pump(Duration(milliseconds: 100));
     expect(find.bySubtype<ProgressIndicator>(), findsOneWidget);
   });
 
@@ -65,7 +66,7 @@ void main() {
             ),
           ),
         );
-        await tester.pump();
+        await tester.pump(Duration(milliseconds: 100));
         expect(find.byType(SnackBar), findsOneWidget);
         expect(
             tester
@@ -97,6 +98,7 @@ void main() {
             ),
           ),
         );
+        await tester.pump(Duration(milliseconds: 100));
         expect(find.bySubtype<Scrollable>(), findsOneWidget);
         var images = find
             .descendant(
