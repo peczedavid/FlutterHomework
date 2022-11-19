@@ -131,11 +131,11 @@ class _LoginPageProviderState extends State<LoginPageProvider> {
                           .login(emailController.text, passwordController.text,
                               _rememberMe)
                           .then((value) {
-                          model.isLoading = false;
+                          //model.isLoading = false;
                         print('VALUE VALUE VALUE');
                         Navigator.pushReplacementNamed(context, "/list");
                       }).catchError((error) {
-                        model.isLoading = false;
+                        //model.isLoading = false;
                         print('CATCH ERROR CATCH ERROR');
                         var snackBar = SnackBar(
                           content: Text(error.message),

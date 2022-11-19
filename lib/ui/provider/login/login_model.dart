@@ -22,27 +22,29 @@ class LoginModel extends ChangeNotifier {
   static const String accesTokenName = 'TEST_TOKEN';
 
   Future login(String email, String password, bool rememberMe) async {
-    if(isLoading) return;
+    if (isLoading) return;
     isLoading = true;
     notifyListeners();
     Dio dio = GetIt.I<Dio>();
     SharedPreferences sharedPreferences = GetIt.I<SharedPreferences>();
 
     try {
-      var response = await dio.post('/login', data: {'email': email, 'password': password});
+      var response = await dio
+          .post('/login', data: {'email': email, 'password': password});
+      isLoading = false;
+      notifyListeners();
       var token = response.data!['token'];
       dio.options.headers['Authorization'] = 'Bearer $token';
       if (rememberMe) {
-        return sharedPreferences.setString(accesTokenName, token!);
+        await sharedPreferences.setString(accesTokenName, token!);
+        return;
       }
     } catch (error) {
-      var parsedError = jsonDecode((error as dynamic).response.toString());
       isLoading = false;
       notifyListeners();
+      var parsedError = jsonDecode((error as dynamic).response.toString());
       throw LoginException(parsedError['message']);
     }
-
-    
 
     // return dio.post('/login', data: {'email': email, 'password': password}).then((response) {
     //   var token = response.data!['token'];
@@ -60,7 +62,7 @@ class LoginModel extends ChangeNotifier {
 
   bool tryAutoLogin() {
     SharedPreferences sharedPreferences = GetIt.I<SharedPreferences>();
-    if(!sharedPreferences.containsKey(accesTokenName)) {
+    if (!sharedPreferences.containsKey(accesTokenName)) {
       return false;
     }
     Dio dio = GetIt.I<Dio>();
