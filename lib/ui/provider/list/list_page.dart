@@ -4,7 +4,6 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../main.dart';
 import '../login/login_model.dart';
 
 class ListPageProvider extends StatefulWidget {
@@ -39,12 +38,13 @@ class _ListPageProviderState extends State<ListPageProvider> {
           IconButton(
             icon: const Icon(Icons.logout_outlined),
             onPressed: () {
-              SharedPreferences sharedPreferences =
-                  GetIt.I<SharedPreferences>();
-              if (sharedPreferences.get(LoginModel.accesTokenName) != null) {
-                sharedPreferences.remove(LoginModel.accesTokenName).then(
-                    (value) => Navigator.pushReplacementNamed(context, "/"));
-              } else {
+              SharedPreferences sharedPreferences = GetIt.I<SharedPreferences>();
+              bool isTokenSaved = sharedPreferences.containsKey(LoginModel.accesTokenName);
+              if(isTokenSaved) {
+                sharedPreferences.remove(LoginModel.accesTokenName).then((value) => 
+                Navigator.pushReplacementNamed(context, "/"));
+              }
+              else {
                 Navigator.pushReplacementNamed(context, "/");
               }
             },

@@ -24,35 +24,47 @@ class LoginModel extends ChangeNotifier {
   Future login(String email, String password, bool rememberMe) async {
     if(isLoading) return;
     isLoading = true;
+    notifyListeners();
     Dio dio = GetIt.I<Dio>();
-    Map<String, String> data = {'email': email, 'password': password};
-    return dio.post<Map<String, String>>('/login', data: data).then((response) {
-      print(response);
-      print('login model success');
+    SharedPreferences sharedPreferences = GetIt.I<SharedPreferences>();
+
+    try {
+      var response = await dio.post('/login', data: {'email': email, 'password': password});
+      var token = response.data!['token'];
+      dio.options.headers['Authorization'] = 'Bearer $token';
       if (rememberMe) {
-        var token = response.data!['token'];
-        SharedPreferences sharedPreferences = GetIt.I<SharedPreferences>();
-        sharedPreferences.setString(accesTokenName, token!);
+        return sharedPreferences.setString(accesTokenName, token!);
       }
-      else {
-        var token = response.data!['token'];
-        SharedPreferences sharedPreferences = GetIt.I<SharedPreferences>();
-        sharedPreferences.setString('token_tmp', token!);
-      }
-      notifyListeners();
-    }).catchError((error) {
-      print('login model error');
-      // TODO: handle as map
-      var parsedError = jsonDecode(error.response.toString());
+    } catch (error) {
+      var parsedError = jsonDecode((error as dynamic).response.toString());
       notifyListeners();
       throw LoginException(parsedError['message']);
-    });
+    }
+
+    
+
+    // return dio.post('/login', data: {'email': email, 'password': password}).then((response) {
+    //   var token = response.data!['token'];
+    //   dio.options.headers['Authorization'] = 'Bearer $token';
+    //   if (rememberMe) {
+    //     sharedPreferences.setString(accesTokenName, token!);
+    //   }
+    //   notifyListeners();
+    // }).catchError((error) {
+    //   var parsedError = jsonDecode(error.response.toString());
+    //   notifyListeners();
+    //   throw LoginException(parsedError['message']);
+    // });
   }
 
   bool tryAutoLogin() {
-    print('try auto login');
     SharedPreferences sharedPreferences = GetIt.I<SharedPreferences>();
+    if(!sharedPreferences.containsKey(accesTokenName)) {
+      return false;
+    }
+    Dio dio = GetIt.I<Dio>();
     String? token = sharedPreferences.getString(accesTokenName);
-    return token != null;
+    dio.options.headers['Authorization'] = 'Bearer $token';
+    return true;
   }
 }

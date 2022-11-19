@@ -24,23 +24,13 @@ class ListModel extends ChangeNotifier {
 
   Future loadUsers() async {
     isLoading = true;
-    Dio dio = GetIt.I<Dio>();
     notifyListeners();
+    Dio dio = GetIt.I<Dio>();
     SharedPreferences sharedPreferences = GetIt.I<SharedPreferences>();
-    String? accesToken = sharedPreferences.getString(LoginModel.accesTokenName);
-    String? tokenTmp = sharedPreferences.getString('token_tmp');
-    String token = '';
-    if(tokenTmp != null) {
-      token = tokenTmp;
-      sharedPreferences.remove('token_tmp');
-    }
-    else if(accesToken != null) {
-      token = accesToken;
-    }
-
+    var token = sharedPreferences.getString(LoginModel.accesTokenName);
+    print(token);
     return dio
-        .get<List<Map<String, String>>>('/users',
-            options: Options(headers: {"authorization": 'Bearer $token'}))
+        .get('/users')
         .then((value) {
           users.clear();
           for (var mapUserItem in value.data!) {
@@ -51,10 +41,9 @@ class ListModel extends ChangeNotifier {
           isLoading = false;
           notifyListeners();
         }).catchError((error) {
-          // TODO: handle as map
           isLoading = false;
-          var parsedError = jsonDecode(error.response.toString());
           notifyListeners();
+          var parsedError = jsonDecode(error.response.toString());
           throw ListException(parsedError['message']);
         });
   }
